@@ -1,0 +1,50 @@
+---
+title: "3. Data Wrangling - Exercise #2"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Use Dplyr package
+```{r}
+library(dplyr)
+```
+
+
+## Load titanic CSV into a Dataframe
+```{r}
+titanic_df <- read.csv(file="C:/Users/min_e/OneDrive/Documents/Springboard/Intro to Data Science/3_Data_wrangling/Exercise 3.2 - Titanic/titanic_original.csv", header=TRUE, sep=",")
+```
+
+## 1: Port of embarkation
+```{r}
+titanic_df$embarked[is.na(titanic_df$embarked)] <- "S"
+titanic_df$embarked[titanic_df$embarked == ""] <- "S"
+```
+
+## 2: Age
+```{r}
+age_mean <- mean(titanic_df$age, na.rm=TRUE)
+round(age_mean, 0)
+titanic_df$age[is.na(titanic_df$age)] <- age_mean
+```
+
+## 3: Lifeboat
+```{r}
+levels(titanic_df$boat) <- c(levels(titanic_df$boat), "None")
+titanic_df$boat[titanic_df$boat == ""] <- "None"
+```
+
+## 4: Cabin
+```{r}
+titanic_df = within(titanic_df, {
+  has_cabin_number = ifelse(cabin == "", 0, 1) 
+    })
+```
+
+## Write refine_df to CSV file
+```{r}
+write.csv(titanic_df, file = "C:/Users/min_e/OneDrive/Documents/Springboard/Intro to Data Science/3_Data_wrangling/Exercise 3.2 - Titanic/titanic_clean.csv", na = "", row.names=FALSE)
+```
